@@ -233,6 +233,84 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* Modal Cảm Ơn */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 85%;
+            width: 320px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+            position: relative;
+            z-index: 10;
+        }
+
+        .modal h2 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .modal p {
+            color: var(--silver);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--silver);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        #fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -258,7 +336,7 @@
             </div>
 
             <div class="action-btns">
-                <a href="https://zalo.me/0372596258" class="btn btn-primary">
+                <a href="#" onclick="showThankYou(event)" class="btn btn-primary">
                     <i class="fa-solid fa-comment-dots"></i> Xác nhận dự tiệc
                 </a>
                 
@@ -266,6 +344,29 @@
                    target="_blank" class="btn btn-secondary">
                    <i class="fa-solid fa-location-dot"></i> Chỉ đường Google Maps
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cảm Ơn -->
+    <div id="thankYouModal" class="modal">
+        <canvas id="fireworks"></canvas>
+        <div class="modal-content">
+            <!-- Form Nhập Thông Tin -->
+            <div id="rsvpForm">
+                <h2>XÁC NHẬN THAM DỰ</h2>
+                <p>Vui lòng để lại tên và lời chúc cho Nhã nhé!</p>
+                <input type="text" id="guestName" class="form-input" placeholder="Tên của bạn (VD: Minh Tuấn)">
+                <textarea id="guestWishes" class="form-input" rows="3" placeholder="Lời chúc... (Tùy chọn)"></textarea>
+                <button onclick="submitRSVP()" class="btn btn-primary" style="width: 100%; border: none;">Gửi xác nhận</button>
+            </div>
+
+            <!-- Thông Báo Thành Công (Ẩn mặc định) -->
+            <div id="successMsg" style="display: none;">
+                <div style="font-size: 3rem; margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i></div>
+                <h2>CẢM ƠN CẬU!</h2>
+                <p>Nhã rất vui mừng được đón tiếp cậu tại bữa tiệc sinh nhật.</p>
+                <button onclick="closeModal()" class="btn btn-primary" style="width: 100%; border: none;">Đóng</button>
             </div>
         </div>
     </div>
@@ -284,6 +385,140 @@
             setTimeout(() => { particle.remove(); }, 8000);
         }
         setInterval(createParticle, 250);
+
+        // Hiệu ứng pháo hoa
+        let canvas, ctx, w, h, particles = [], fireworks = [], animationId;
+
+        function initFireworks() {
+            canvas = document.getElementById('fireworks');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+
+        function createFirework() {
+            const x = Math.random() * (w - 100) + 50;
+            const y = h;
+            const targetY = h * 0.2 + Math.random() * (h * 0.4);
+            const color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            fireworks.push({ x, y, targetY, color, speed: 4 + Math.random() * 4 });
+        }
+
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 40; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 4 + 1;
+                particles.push({
+                    x, y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    color,
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.01
+                });
+            }
+        }
+
+        function updateFireworks() {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, w, h);
+            ctx.globalCompositeOperation = 'source-over';
+
+            fireworks.forEach((f, i) => {
+                f.y -= f.speed;
+                ctx.fillStyle = f.color;
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                if (f.y <= f.targetY) {
+                    createExplosion(f.x, f.y, f.color);
+                    fireworks.splice(i, 1);
+                }
+            });
+
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05;
+                p.alpha -= p.decay;
+                if (p.alpha <= 0) particles.splice(i, 1);
+                else {
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                }
+            });
+
+            if (Math.random() < 0.05) createFirework();
+            animationId = requestAnimationFrame(updateFireworks);
+        }
+
+        function showThankYou(e) {
+            e.preventDefault();
+            document.getElementById('thankYouModal').style.display = 'flex';
+            
+            // Reset về trạng thái nhập form mỗi khi mở lại
+            document.getElementById('rsvpForm').style.display = 'block';
+            document.getElementById('successMsg').style.display = 'none';
+            
+            // Dừng pháo hoa nếu đang chạy (vì chưa gửi form)
+            if (animationId) cancelAnimationFrame(animationId);
+            if (ctx) ctx.clearRect(0, 0, w, h);
+        }
+
+        function submitRSVP() {
+            const name = document.getElementById('guestName').value;
+            const wishes = document.getElementById('guestWishes').value;
+            
+            if (!name) {
+                alert('Bạn quên nhập tên rồi nè!');
+                return;
+            }
+
+            // Hiển thị trạng thái đang gửi
+            const btn = document.querySelector('#rsvpForm button');
+            const originalText = btn.innerText;
+            btn.innerText = 'Đang gửi...';
+            btn.disabled = true;
+
+            // URL Google Apps Script (Đã cập nhật link mẫu, bạn nhớ thay link của bạn vào nếu có)
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxbXX7W8MdoCefJx0s-5QjyqBIaRZSqx_bJX2za0QADNf67hSXbkOQL8Re5zpmh571F/exec';
+            
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('wishes', wishes);
+
+            fetch(scriptURL, { method: 'POST', body: formData })
+                .then(response => {
+                    // Gửi thành công -> Hiện cảm ơn và pháo hoa
+                    document.getElementById('rsvpForm').style.display = 'none';
+                    document.getElementById('successMsg').style.display = 'block';
+                    if (!canvas) initFireworks();
+                    fireworks = []; particles = [];
+                    updateFireworks();
+                })
+                .catch(error => {
+                    alert('Có lỗi xảy ra! Bạn hãy thử lại hoặc nhắn tin Zalo nhé.');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                });
+        }
+
+        function closeModal() {
+            document.getElementById('thankYouModal').style.display = 'none';
+            cancelAnimationFrame(animationId);
+            if (ctx) ctx.clearRect(0, 0, w, h);
+        }
     </script>
 </body>
 </html>
