@@ -4,229 +4,286 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lời Mời Sinh Nhật - Nhã Phan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gold: #C5A059;
-            --navy: #0D1B2A;
+            --bg: #000000;
+            --silver: #C0C0C0;
             --white: #ffffff;
-        }
-
-        /* Hiệu ứng hiện dần */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hiệu ứng chữ lấp lánh */
-        @keyframes sparkle-shine {
-            0% { background-position: -200%; }
-            100% { background-position: 200%; }
-        }
-
-        /* Hiệu ứng trôi nổi của thiệp */
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
         }
 
         body {
             margin: 0;
-            background: #0D1B2A;
-            background-image: radial-gradient(circle at center, #1B263B 0%, #0D1B2A 100%);
-            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .invitation-container {
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            display: flex;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            color: var(--white);
-            overflow-x: hidden;
+            padding-bottom: 50px;
         }
 
-        .card {
-            background: var(--white);
-            width: 90%;
-            max-width: 400px;
-            padding: 45px 25px;
-            border-radius: 25px;
+        /* Chữ HAPPY BIRTHDAY ẩn phía sau */
+        .bg-text-layer {
+            position: absolute;
+            top: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 5.5rem;
+            line-height: 0.8;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.08);
             text-align: center;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-            animation: fadeInUp 1.5s ease-out, floating 5s ease-in-out infinite;
-            position: relative;
-        }
-
-        /* Ảnh chân dung */
-        .portrait-container {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-
-        .portrait-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid var(--gold);
-            padding: 5px;
-            background: white;
-        }
-
-        .sub-title {
-            color: var(--gold);
-            font-size: 0.8rem;
-            letter-spacing: 4px;
             text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 12px;
+            z-index: 1;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
         }
 
-        /* Chữ lấp lánh */
-        .sparkle-name {
-            font-size: 2.6rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--navy);
-            background: linear-gradient(90deg, #0D1B2A, #C5A059, #0D1B2A);
+        /* Vòng hào quang mờ ảo */
+        .glow-halo {
+            position: absolute;
+            top: 80px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(192, 192, 192, 0.1) 0%, transparent 70%);
+            z-index: 2;
+        }
+
+        /* Ảnh chân dung PNG (Cần file portrait.png) */
+        .portrait {
+            width: 100%;
+            height: 45vh;
+            object-fit: contain;
+            z-index: 3;
+            margin-top: 20px;
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            opacity: 0;
+            animation: float 6s ease-in-out infinite, fadeIn 1.5s ease-out forwards;
+        }
+
+        /* Tên NHÃ PHAN lồng ghép lấp lánh */
+        .main-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            margin: -60px 0 15px 0;
+            z-index: 4;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            background: linear-gradient(to right, #888 0%, #fff 50%, #888 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: sparkle-shine 4s linear infinite;
+            opacity: 0;
+            animation: sparkle 3s linear infinite, fadeInUp 1s ease-out 0.5s forwards;
         }
 
-        .event-main {
-            color: #444;
-            margin: 25px 0;
-            font-size: 1.1rem;
-            font-weight: 300;
+        /* Khối nội dung */
+        .info-content {
+            z-index: 5;
+            text-align: center;
+            width: 85%;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1s forwards;
         }
 
-        .venue-highlight {
-            display: block;
-            color: var(--gold);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-top: 10px;
+        .invite-label {
+            font-size: 0.65rem;
+            letter-spacing: 5px;
             text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 5px;
         }
 
-        .restaurant-preview {
-            width: 100%;
-            height: 190px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin: 15px 0;
-        }
-
-        /* Countdown */
-        .countdown-label {
-            color: #999;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
+        .event-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            font-style: normal;
+            font-weight: 700;
             margin-bottom: 15px;
-            font-weight: 600;
+            letter-spacing: 2px;
         }
 
-        #countdown {
+        .time-box {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .restaurant-box {
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
+
+        .restaurant-box b {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            color: var(--silver);
+            display: block;
+            margin-top: 5px;
+            letter-spacing: 0;
+        }
+
+        /* Nút bấm thiết kế mới rõ ràng */
+        .action-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .btn {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin-bottom: 35px;
-        }
-        .unit span {
-            display: block;
-            font-size: 1.7rem;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            text-decoration: none;
             font-weight: 700;
-            color: var(--navy);
-        }
-        .unit { font-size: 0.65rem; color: #aaa; font-weight: 600; }
-
-        /* Nút bấm */
-        .btn-zalo {
-            display: block;
-            background: var(--navy);
-            color: var(--white);
-            padding: 18px;
-            text-decoration: none;
-            border-radius: 15px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: 0.4s;
-            box-shadow: 0 10px 25px rgba(13, 27, 42, 0.2);
-        }
-        .btn-zalo:hover {
-            background: var(--gold);
-            transform: scale(1.03);
-        }
-
-        .btn-map {
-            display: inline-block;
-            margin-top: 15px;
-            color: #888;
-            text-decoration: none;
             font-size: 0.8rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        /* Nút Zalo */
+        .btn-primary {
+            background: white;
+            color: black;
+            border: 1px solid white;
+        }
+
+        .btn-primary:hover {
+            background: var(--silver);
+            border-color: var(--silver);
+            color: white;
+        }
+
+        /* Nút Google Maps (Bản mới rõ ràng hơn) */
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Hiệu ứng hạt bụi vàng rơi */
+        .particle {
+            position: absolute;
+            background: var(--silver);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 6;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes sparkle {
+            to { background-position: 200% center; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="portrait-container">
-            <img src="portrait.jpg" alt="Nhã Phan">
+    <div class="invitation-container">
+        <div class="bg-text-layer">HAPPY<br>BIRTHDAY</div>
+        <div class="glow-halo"></div>
+
+        <img src="portrait.png" alt="Nhã Phan" class="portrait">
+
+        <h1 class="main-name">NHÃ PHAN</h1>
+
+        <div class="info-content">
+            <div style="font-size: 0.7rem; letter-spacing: 4px; color: var(--silver); margin-bottom: 15px; font-weight: 600; text-shadow: 0 0 10px rgba(255,255,255,0.3);">VIP INVITATION</div>
+            <p class="invite-label">Thân mời dự tiệc</p>
+            <div class="event-name">BIRTHDAY PARTY</div>
+            
+            <div class="time-box">31 . 12 . 2025 | 21:00 PM</div>
+            
+            <div class="restaurant-box">
+                Tại nhà hàng
+                <b>MEMORY LOUNGE ĐÀ NẴNG</b>
+            </div>
+
+            <div class="action-btns">
+                <a href="https://zalo.me/0372596258" class="btn btn-primary">
+                    <i class="fa-solid fa-comment-dots"></i> Xác nhận dự tiệc
+                </a>
+                
+                <a href="https://www.google.com/maps/search/Memory+Lounge+Đà+Nẵng" 
+                   target="_blank" class="btn btn-secondary">
+                   <i class="fa-solid fa-location-dot"></i> Chỉ đường Google Maps
+                </a>
+            </div>
         </div>
-
-        <div class="sub-title">Mời Dự Tiệc Sinh Nhật</div>
-        <h1 class="sparkle-name">NHÃ PHAN</h1>
-        
-        <div class="event-main">
-            31 . 12 . 2025 | 21:00 (9:00 Tối)
-            <span class="venue-highlight">Memory Lounge Đà Nẵng</span>
-        </div>
-
-        <img src="restaurant.jpg" alt="Memory Lounge" class="restaurant-preview">
-
-        <div class="countdown-label">ĐẾN BUỔI TIỆC CÒN</div>
-        <div id="countdown">
-            <div class="unit"><span id="days">00</span>NGÀY</div>
-            <div class="unit"><span id="hours">00</span>GIỜ</div>
-            <div class="unit"><span id="minutes">00</span>PHÚT</div>
-        </div>
-
-        <a href="https://zalo.me/0372596258" class="btn-zalo" target="_blank">XÁC NHẬN THAM DỰ</a>
-        <a href="https://www.google.com/maps/search/Memory+Lounge+Đà+Nẵng" target="_blank" class="btn-map">CHỈ ĐƯỜNG TRÊN GOOGLE MAPS</a>
     </div>
 
     <script>
-        // Pháo hoa bụi vàng Gold
-        window.onload = function() {
-            var end = Date.now() + (3 * 1000);
-            var colors = ['#C5A059', '#ffffff', '#B8860B'];
-            (function frame() {
-              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
-              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
-              if (Date.now() < end) { requestAnimationFrame(frame); }
-            }());
-        };
-
-        // Đếm ngược
-        const targetDate = new Date("Dec 31, 2025 21:00:00").getTime();
-        setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            if (distance < 0) {
-                document.getElementById("countdown").innerHTML = "CHÚC MỪNG SINH NHẬT!";
-                return;
-            }
-            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
-            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        }, 1000);
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 3 + 1 + 'px';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 4 + 4 + 's';
+            particle.style.animationDuration = duration;
+            document.body.appendChild(particle);
+            setTimeout(() => { particle.remove(); }, 8000);
+        }
+        setInterval(createParticle, 250);
     </script>
 </body>
 </html>
