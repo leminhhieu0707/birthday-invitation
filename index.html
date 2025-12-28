@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lời Mời Sinh Nhật</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS để trang trí */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); /* Màu nền gradient */
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transition: transform 0.3s ease;
+            border: 5px solid #fff;
+        }
+
+        /* Hiệu ứng khi di chuột vào thiệp */
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff6b6b;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .info {
+            background: #fff5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #ff6b6b;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #ee5253;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Happy Birthday!</h1>
+        <p>Trân trọng kính mời bạn đến dự buổi tiệc sinh nhật thân mật của mình.</p>
+        
+        <div class="info">
+            <strong>📅 Ngày:</strong> 28 Tháng 12, 2025 <br>
+            <strong>⏰ Giờ:</strong> 18:00 PM <br>
+            <strong>📍 Địa điểm:</strong> Nhà hàng Sen Vàng, Quận 1
+        </div>
+
+        <a href="#" class="btn">Xác nhận tham dự</a>
+    </div>
+
+</body>
+</html>
