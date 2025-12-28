@@ -3,180 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Invitation - Nhã Phan Makeup</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Lời Mời Sinh Nhật - Nhã Phan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
-            --primary-color: #e2a9be; /* Rose Gold */
-            --dark-color: #1a1a1a;
+            --gold: #C5A059;
+            --navy: #0D1B2A;
+            --white: #ffffff;
+        }
+
+        /* Hiệu ứng hiện dần */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hiệu ứng chữ lấp lánh */
+        @keyframes sparkle-shine {
+            0% { background-position: -200%; }
+            100% { background-position: 200%; }
+        }
+
+        /* Hiệu ứng trôi nổi của thiệp */
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
         }
 
         body {
             margin: 0;
-            background: #1a1a1a;
+            background: #0D1B2A;
+            background-image: radial-gradient(circle at center, #1B263B 0%, #0D1B2A 100%);
             font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px 0;
+            color: var(--white);
+            overflow-x: hidden;
         }
 
-        .invitation-card {
-            background: white;
-            width: 100%;
-            max-width: 450px;
-            margin: 10px;
-            padding: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        .card {
+            background: var(--white);
+            width: 90%;
+            max-width: 400px;
+            padding: 45px 25px;
+            border-radius: 25px;
             text-align: center;
-            border: 1px solid var(--primary-color);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            animation: fadeInUp 1.5s ease-out, floating 5s ease-in-out infinite;
+            position: relative;
         }
 
-        .inner-border {
-            border: 1px solid var(--primary-color);
-            padding: 20px 10px;
+        /* Ảnh chân dung */
+        .portrait-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 30px;
+            position: relative;
         }
 
-        /* Style cho ảnh chân dung */
-        .portrait-frame {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            border: 3px solid var(--primary-color);
-            padding: 5px;
-            overflow: hidden;
-        }
-
-        .portrait-frame img {
+        .portrait-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+            border: 2px solid var(--gold);
+            padding: 5px;
+            background: white;
         }
 
-        .brand-name {
+        .sub-title {
+            color: var(--gold);
             font-size: 0.8rem;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: var(--primary-color);
-            margin-bottom: 5px;
-            display: block;
+            font-weight: 700;
+            margin-bottom: 12px;
         }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: var(--dark-color);
-            margin: 5px 0;
+        /* Chữ lấp lánh */
+        .sparkle-name {
+            font-size: 2.6rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--navy);
+            background: linear-gradient(90deg, #0D1B2A, #C5A059, #0D1B2A);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: sparkle-shine 4s linear infinite;
         }
 
-        .highlight-name {
-            color: var(--primary-color);
-            font-style: italic;
-        }
-
-        .details {
-            margin: 20px 0;
+        .event-main {
+            color: #444;
+            margin: 25px 0;
+            font-size: 1.1rem;
             font-weight: 300;
-            line-height: 1.8;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
         }
 
-        /* Style cho ảnh nhà hàng */
-        .venue-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            margin: 15px 0;
-            border-radius: 5px;
-            filter: grayscale(30%);
-            transition: 0.5s;
+        .venue-highlight {
+            display: block;
+            color: var(--gold);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
         }
-        
-        .venue-img:hover {
-            filter: grayscale(0%);
+
+        .restaurant-preview {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+
+        /* Countdown */
+        .countdown-label {
+            color: #999;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         #countdown {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin: 15px 0;
+            gap: 25px;
+            margin-bottom: 35px;
         }
-
-        .count-item span {
+        .unit span {
             display: block;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--navy);
         }
+        .unit { font-size: 0.65rem; color: #aaa; font-weight: 600; }
 
-        .btn {
+        /* Nút bấm */
+        .btn-zalo {
             display: block;
-            background: var(--dark-color);
-            color: white;
-            padding: 12px;
+            background: var(--navy);
+            color: var(--white);
+            padding: 18px;
             text-decoration: none;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            border: 1px solid var(--dark-color);
-            transition: 0.3s;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.4s;
+            box-shadow: 0 10px 25px rgba(13, 27, 42, 0.2);
+        }
+        .btn-zalo:hover {
+            background: var(--gold);
+            transform: scale(1.03);
         }
 
-        .btn:hover {
-            background: white;
-            color: var(--dark-color);
+        .btn-map {
+            display: inline-block;
+            margin-top: 15px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 2px;
         }
     </style>
 </head>
 <body>
 
-    <div class="invitation-card">
-        <div class="inner-border">
-            <div class="portrait-frame">
-                <img src="portrait.jpg" alt="Phan Phương Nhã">
-            </div>
-
-            <span class="brand-name">NHÃ PHAN MAKEUP</span>
-            <h1>Birthday <br><span class="highlight-name">Celebration</span></h1>
-            
-            <p style="font-size: 0.85rem; margin-top: 15px;">Trân trọng kính mời bạn đến dự tiệc của</p>
-            <h2 style="font-family: 'Playfair Display'; margin: 5px 0;">Phan Phương Nhã</h2>
-
-            <div class="details">
-                📅 <b>Thứ Tư, 31 Tháng 12, 2025</b><br>
-                🕘 <b>21:00 (Tiệc đêm giao thừa)</b><br>
-                📍 <b>07 Bạch Đằng, Hải Châu, Đà Nẵng</b>
-            </div>
-
-            <img src="restaurant.jpg" alt="Venue" class="venue-img">
-
-            <div id="countdown">
-                <div class="count-item"><span id="days">00</span>Ngày</div>
-                <div class="count-item"><span id="hours">00</span>Giờ</div>
-                <div class="count-item"><span id="minutes">00</span>Phút</div>
-            </div>
-
-            <a href="https://zalo.me/SỐ_ĐIỆN_THOẠI" class="btn">XÁC NHẬN THAM DỰ</a>
-            <a href="https://www.google.com/maps/search/07+Bạch+Đằng,+Hải+Châu,+Đà+Nẵng" target="_blank" class="btn" style="background:none; color:#1a1a1a;">XEM BẢN ĐỒ</a>
+    <div class="card">
+        <div class="portrait-container">
+            <img src="portrait.jpg" alt="Nhã Phan">
         </div>
+
+        <div class="sub-title">Mời Dự Tiệc Sinh Nhật</div>
+        <h1 class="sparkle-name">NHÃ PHAN</h1>
+        
+        <div class="event-main">
+            31 . 12 . 2025 | 21:00 (9:00 Tối)
+            <span class="venue-highlight">Memory Lounge Đà Nẵng</span>
+        </div>
+
+        <img src="restaurant.jpg" alt="Memory Lounge" class="restaurant-preview">
+
+        <div class="countdown-label">ĐẾN BUỔI TIỆC CÒN</div>
+        <div id="countdown">
+            <div class="unit"><span id="days">00</span>NGÀY</div>
+            <div class="unit"><span id="hours">00</span>GIỜ</div>
+            <div class="unit"><span id="minutes">00</span>PHÚT</div>
+        </div>
+
+        <a href="https://zalo.me/0372596258" class="btn-zalo" target="_blank">XÁC NHẬN THAM DỰ</a>
+        <a href="https://www.google.com/maps/search/Memory+Lounge+Đà+Nẵng" target="_blank" class="btn-map">CHỈ ĐƯỜNG TRÊN GOOGLE MAPS</a>
     </div>
 
     <script>
+        // Pháo hoa bụi vàng Gold
         window.onload = function() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#e2a9be', '#ffffff', '#1a1a1a'] });
+            var end = Date.now() + (3 * 1000);
+            var colors = ['#C5A059', '#ffffff', '#B8860B'];
+            (function frame() {
+              confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+              confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+              if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
         };
 
+        // Đếm ngược
         const targetDate = new Date("Dec 31, 2025 21:00:00").getTime();
         setInterval(function() {
             const now = new Date().getTime();
             const distance = targetDate - now;
+            if (distance < 0) {
+                document.getElementById("countdown").innerHTML = "CHÚC MỪNG SINH NHẬT!";
+                return;
+            }
             document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
