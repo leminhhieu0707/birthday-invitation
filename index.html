@@ -3,91 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lời Mời Sinh Nhật</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <title>Birthday Invitation - Nhã Phan Makeup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     
     <style>
-        /* CSS để trang trí */
+        :root {
+            --primary-color: #e2a9be; /* Rose Gold */
+            --dark-color: #1a1a1a;
+            --text-color: #444;
+        }
+
         body {
             margin: 0;
-            padding: 0;
+            background-color: #f8f9fa;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); /* Màu nền gradient */
-            font-family: 'Quicksand', sans-serif;
+            color: var(--text-color);
         }
 
-        .card {
+        /* Nền trang trí */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+            z-index: -1;
+        }
+
+        .invitation-card {
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            margin: 20px;
+            padding: 40px 20px;
+            border-radius: 0px; /* Kiểu Minimalist hiện đại */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
-            transition: transform 0.3s ease;
-            border: 5px solid #fff;
+            position: relative;
+            border: 1px solid var(--primary-color);
         }
 
-        /* Hiệu ứng khi di chuột vào thiệp */
-        .card:hover {
-            transform: translateY(-10px);
+        /* Khung viền kép tạo sự sang trọng */
+        .inner-border {
+            border: 1px solid var(--primary-color);
+            padding: 30px 15px;
+            height: 100%;
+        }
+
+        .brand-name {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: block;
         }
 
         h1 {
-            font-family: 'Dancing Script', cursive;
-            color: #ff6b6b;
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin: 10px 0;
+            line-height: 1.2;
         }
 
-        p {
-            color: #555;
-            line-height: 1.6;
-            font-size: 1.1rem;
+        .highlight-name {
+            color: var(--primary-color);
+            font-style: italic;
         }
 
-        .info {
-            background: #fff5f5;
-            padding: 15px;
-            border-radius: 10px;
+        .details {
+            margin: 30px 0;
+            font-weight: 300;
+            line-height: 2;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .details b {
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        /* Đồng hồ đếm ngược */
+        #countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             margin-top: 20px;
-            border-left: 5px solid #ff6b6b;
+        }
+
+        .count-item {
+            font-size: 0.8rem;
+        }
+
+        .count-item span {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .btn-group {
+            margin-top: 30px;
         }
 
         .btn {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 12px 30px;
-            background: #ff6b6b;
+            display: block;
+            background: var(--dark-color);
             color: white;
+            padding: 15px;
             text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: background 0.3s;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            margin-bottom: 10px;
+            border: 1px solid var(--dark-color);
         }
 
         .btn:hover {
-            background: #ee5253;
+            background: white;
+            color: var(--dark-color);
+        }
+
+        .btn-map {
+            background: transparent;
+            color: var(--dark-color);
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Happy Birthday!</h1>
-        <p>Trân trọng kính mời bạn đến dự buổi tiệc sinh nhật thân mật của mình.</p>
-        
-        <div class="info">
-            <strong>📅 Ngày:</strong> 28 Tháng 12, 2025 <br>
-            <strong>⏰ Giờ:</strong> 18:00 PM <br>
-            <strong>📍 Địa điểm:</strong> Nhà hàng Sen Vàng, Quận 1
-        </div>
+    <div class="invitation-card">
+        <div class="inner-border">
+            <span class="brand-name">NHÃ PHAN MAKEUP</span>
+            <h1>Birthday <br><span class="highlight-name">Celebration</span></h1>
+            
+            <p style="font-size: 0.9rem;">Trân trọng kính mời bạn đến dự tiệc sinh nhật của</p>
+            <h2 style="font-family: 'Playfair Display';">Phan Phương Nhã</h2>
 
-        <a href="#" class="btn">Xác nhận tham dự</a>
+            <div class="details">
+                📅 <b>31 Tháng 12, 2025</b><br>
+                🕘 <b>21:00 (9:00 PM)</b><br>
+                📍 <b>07 Bạch Đằng, Q. Hải Châu, TP. Đà Nẵng</b>
+            </div>
+
+            <p style="font-size: 0.8rem; margin-bottom: 5px;">TIỆC ĐẾM NGƯỢC CHÚC MỪNG TUỔI MỚI</p>
+            <div id="countdown">
+                <div class="count-item"><span id="days">00</span>Ngày</div>
+                <div class="count-item"><span id="hours">00</span>Giờ</div>
+                <div class="count-item"><span id="minutes">00</span>Phút</div>
+            </div>
+
+            <div class="btn-group">
+                <a href="https://zalo.me/SỐ_ĐIỆN_THOẠI_CỦA_BẠN" class="btn">XÁC NHẬN THAM DỰ</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=07+Bạch+Đằng+Hải+Châu+Đà+Nẵng" target="_blank" class="btn btn-map">XEM BẢN ĐỒ</a>
+            </div>
+        </div>
     </div>
 
+    <script>
+        // Hiệu ứng pháo hoa giấy khi vừa mở trang
+        window.onload = function() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#e2a9be', '#ffffff', '#1a1a1a']
+            });
+        };
+
+        // Code đếm ngược đến 21:00 ngày 31/12/2025
+        const targetDate = new Date("Dec 31, 2025 21:00:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById("days").innerHTML = days;
+            document.getElementById("hours").innerHTML = hours;
+            document.getElementById("minutes").innerHTML = minutes;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "HAPPY BIRTHDAY!";
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
