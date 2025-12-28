@@ -11,64 +11,67 @@
         :root {
             --primary-color: #e2a9be; /* Rose Gold */
             --dark-color: #1a1a1a;
-            --text-color: #444;
         }
 
         body {
             margin: 0;
-            background-color: #f8f9fa;
+            background: #1a1a1a;
             font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            color: var(--text-color);
-        }
-
-        /* Nền trang trí */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
-            z-index: -1;
+            padding: 20px 0;
         }
 
         .invitation-card {
             background: white;
             width: 100%;
             max-width: 450px;
-            margin: 20px;
-            padding: 40px 20px;
-            border-radius: 0px; /* Kiểu Minimalist hiện đại */
+            margin: 10px;
+            padding: 20px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             text-align: center;
-            position: relative;
             border: 1px solid var(--primary-color);
         }
 
-        /* Khung viền kép tạo sự sang trọng */
         .inner-border {
             border: 1px solid var(--primary-color);
-            padding: 30px 15px;
+            padding: 20px 10px;
+        }
+
+        /* Style cho ảnh chân dung */
+        .portrait-frame {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            padding: 5px;
+            overflow: hidden;
+        }
+
+        .portrait-frame img {
+            width: 100%;
             height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .brand-name {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             display: block;
         }
 
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--dark-color);
-            margin: 10px 0;
-            line-height: 1.2;
+            margin: 5px 0;
         }
 
         .highlight-name {
@@ -77,64 +80,58 @@
         }
 
         .details {
-            margin: 30px 0;
+            margin: 20px 0;
             font-weight: 300;
-            line-height: 2;
+            line-height: 1.8;
             border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            padding: 20px 0;
+            padding-top: 20px;
         }
 
-        .details b {
-            color: var(--dark-color);
-            font-weight: 600;
+        /* Style cho ảnh nhà hàng */
+        .venue-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            margin: 15px 0;
+            border-radius: 5px;
+            filter: grayscale(30%);
+            transition: 0.5s;
+        }
+        
+        .venue-img:hover {
+            filter: grayscale(0%);
         }
 
-        /* Đồng hồ đếm ngược */
         #countdown {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
-        }
-
-        .count-item {
-            font-size: 0.8rem;
+            margin: 15px 0;
         }
 
         .count-item span {
             display: block;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--primary-color);
-        }
-
-        .btn-group {
-            margin-top: 30px;
         }
 
         .btn {
             display: block;
             background: var(--dark-color);
             color: white;
-            padding: 15px;
+            padding: 12px;
             text-decoration: none;
             letter-spacing: 2px;
             font-size: 0.8rem;
-            transition: 0.3s;
-            margin-bottom: 10px;
+            margin-top: 10px;
             border: 1px solid var(--dark-color);
+            transition: 0.3s;
         }
 
         .btn:hover {
             background: white;
             color: var(--dark-color);
-        }
-
-        .btn-map {
-            background: transparent;
-            color: var(--dark-color);
-            border: 1px solid #ddd;
         }
     </style>
 </head>
@@ -142,62 +139,47 @@
 
     <div class="invitation-card">
         <div class="inner-border">
+            <div class="portrait-frame">
+                <img src="portrait.jpg" alt="Phan Phương Nhã">
+            </div>
+
             <span class="brand-name">NHÃ PHAN MAKEUP</span>
             <h1>Birthday <br><span class="highlight-name">Celebration</span></h1>
             
-            <p style="font-size: 0.9rem;">Trân trọng kính mời bạn đến dự tiệc sinh nhật của</p>
-            <h2 style="font-family: 'Playfair Display';">Phan Phương Nhã</h2>
+            <p style="font-size: 0.85rem; margin-top: 15px;">Trân trọng kính mời bạn đến dự tiệc của</p>
+            <h2 style="font-family: 'Playfair Display'; margin: 5px 0;">Phan Phương Nhã</h2>
 
             <div class="details">
-                📅 <b>31 Tháng 12, 2025</b><br>
-                🕘 <b>21:00 (9:00 PM)</b><br>
-                📍 <b>07 Bạch Đằng, Q. Hải Châu, TP. Đà Nẵng</b>
+                📅 <b>Thứ Tư, 31 Tháng 12, 2025</b><br>
+                🕘 <b>21:00 (Tiệc đêm giao thừa)</b><br>
+                📍 <b>07 Bạch Đằng, Hải Châu, Đà Nẵng</b>
             </div>
 
-            <p style="font-size: 0.8rem; margin-bottom: 5px;">TIỆC ĐẾM NGƯỢC CHÚC MỪNG TUỔI MỚI</p>
+            <img src="restaurant.jpg" alt="Venue" class="venue-img">
+
             <div id="countdown">
                 <div class="count-item"><span id="days">00</span>Ngày</div>
                 <div class="count-item"><span id="hours">00</span>Giờ</div>
                 <div class="count-item"><span id="minutes">00</span>Phút</div>
             </div>
 
-            <div class="btn-group">
-                <a href="https://zalo.me/SỐ_ĐIỆN_THOẠI_CỦA_BẠN" class="btn">XÁC NHẬN THAM DỰ</a>
-                <a href="https://www.google.com/maps/search/?api=1&query=07+Bạch+Đằng+Hải+Châu+Đà+Nẵng" target="_blank" class="btn btn-map">XEM BẢN ĐỒ</a>
-            </div>
+            <a href="https://zalo.me/SỐ_ĐIỆN_THOẠI" class="btn">XÁC NHẬN THAM DỰ</a>
+            <a href="https://www.google.com/maps/search/07+Bạch+Đằng,+Hải+Châu,+Đà+Nẵng" target="_blank" class="btn" style="background:none; color:#1a1a1a;">XEM BẢN ĐỒ</a>
         </div>
     </div>
 
     <script>
-        // Hiệu ứng pháo hoa giấy khi vừa mở trang
         window.onload = function() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#e2a9be', '#ffffff', '#1a1a1a']
-            });
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#e2a9be', '#ffffff', '#1a1a1a'] });
         };
 
-        // Code đếm ngược đến 21:00 ngày 31/12/2025
         const targetDate = new Date("Dec 31, 2025 21:00:00").getTime();
-
-        const timer = setInterval(function() {
+        setInterval(function() {
             const now = new Date().getTime();
             const distance = targetDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hours;
-            document.getElementById("minutes").innerHTML = minutes;
-
-            if (distance < 0) {
-                clearInterval(timer);
-                document.getElementById("countdown").innerHTML = "HAPPY BIRTHDAY!";
-            }
+            document.getElementById("days").innerHTML = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerHTML = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerHTML = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         }, 1000);
     </script>
 </body>
